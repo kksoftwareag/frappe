@@ -6,7 +6,7 @@ boto3==1.10.18
 braintree==3.57.1
 chardet==3.0.4
 Click==7.0
-coverage==4.5.4
+coverage==5.0.3
 croniter==0.3.31
 cryptography==2.8
 dropbox==9.1.0
