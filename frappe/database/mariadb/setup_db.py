@@ -66,6 +66,23 @@ def drop_user_and_database(db_name, root_login, root_password):
 	dbman.delete_user(db_name)
 
 
+def resetup_db_user(db_name, root_login, root_password, no_mariadb_socket):
+	frappe.local.db = get_root_connection(root_login, root_password)
+	dbman = DbManager(frappe.local.db)
+	dbman.delete_user(db_name, host="%")
+	dbman.delete_user(db_name)
+	frappe.local.session = frappe._dict({"user": "Administrator"})
+	
+	dbman.create_user(db_name, frappe.conf.db_password)
+	if no_mariadb_socket:
+		dbman.create_user(db_name, frappe.conf.db_password, host="%")
+  
+	dbman.grant_all_privileges(db_name, db_name)
+	if no_mariadb_socket:
+		dbman.grant_all_privileges(db_name, db_name, host="%")
+	dbman.flush_privileges()
+
+
 def bootstrap_database(db_name, verbose, source_sql=None):
 	import sys
 

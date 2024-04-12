@@ -38,6 +38,17 @@ def drop_user_and_database(db_name, root_login=None, root_password=None):
 			db_name, root_login, root_password
 		)
 
+def recreate_user_for_database(db_name, root_login=None, root_password=None, no_mariadb_socket=False):
+	import frappe
+
+	if frappe.conf.db_type == "postgres":
+		pass
+	else:
+		import frappe.database.mariadb.setup_db
+
+		return frappe.database.mariadb.setup_db.resetup_db_user(
+			db_name, root_login, root_password, no_mariadb_socket
+		)
 
 def get_db(host=None, user=None, password=None, port=None):
 	import frappe

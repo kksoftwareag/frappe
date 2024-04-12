@@ -376,6 +376,30 @@ def partial_restore(context, sql_file_path, verbose, encryption_key=None):
 
 	frappe.destroy()
 
+@click.command("restore-user")
+@click.option(
+	"--db-root-username",
+	"--mariadb-root-username",
+	help='Root username for MariaDB or PostgreSQL, Default is "root"',
+)
+@click.option(
+	"--db-root-password", "--mariadb-root-password", help="Root password for MariaDB or PostgreSQL"
+)
+@click.option(
+	"--no-mariadb-socket",
+	is_flag=True,
+	default=False,
+	help="Set MariaDB host to % and use TCP/IP Socket instead of using the UNIX Socket",
+)
+@pass_context
+def restore_user(context, db_root_username="root", db_root_password=None, no_mariadb_socket=False):
+	from frappe.database import recreate_user_for_database
+
+	site = get_site(context)
+	frappe.init(site=site)
+	frappe.connect(site=site)
+	recreate_user_for_database(frappe.conf.db_name, db_root_username, db_root_password, no_mariadb_socket)
+	frappe.destroy()
 
 @click.command("reinstall")
 @click.option("--admin-password", help="Administrator Password for reinstalled site")
@@ -1442,6 +1466,7 @@ commands = [
 	reload_doctype,
 	remove_from_installed_apps,
 	restore,
+	restore_user,
 	run_patch,
 	set_password,
 	set_admin_password,
