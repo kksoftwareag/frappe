@@ -272,7 +272,7 @@ def setup_cache():
 			redis_class=RedisWrapper,
 		)
 
-	return RedisWrapper.from_url(frappe.conf.get("redis_cache"))
+	return RedisWrapper.from_url(frappe.conf.get("redis_cache") or "redis://localhost:11311")
 
 
 def get_sentinel_connection(
