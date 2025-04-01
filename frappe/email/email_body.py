@@ -130,7 +130,7 @@ class EMail:
 		recipients = filter(None, (strip(r) for r in recipients))
 
 		self.sender = sender
-		self.reply_to = reply_to or sender
+		self.reply_to = sender or reply_to
 		self.recipients = recipients
 		self.subject = subject
 		self.expose_recipients = expose_recipients
@@ -260,7 +260,7 @@ class EMail:
 			self.sender = self.email_account.default_sender
 
 		validate_email_address(strip(self.sender), True)
-		self.reply_to = validate_email_address(strip(self.reply_to) or self.sender, True)
+		self.reply_to = validate_email_address(self.sender or strip(self.reply_to), True)
 
 		self.set_header("X-Original-From", self.sender)
 		self.replace_sender()
