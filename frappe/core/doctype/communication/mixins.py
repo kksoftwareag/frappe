@@ -78,15 +78,15 @@ class CommunicationEmailMixin:
 
 		if is_inbound_mail_communcation:
 			# inform parent document owner incase communication is created through inbound mail
-			if doc_owner := self.get_owner():
-				cc.append(doc_owner)
+			# if doc_owner := self.get_owner():
+			# 	cc.append(doc_owner)
 			cc = set(cc) - {self.sender_mailid}
-			assignees = set(self.get_assignees())
-			# Check and remove If user disabled notifications for incoming emails on assigned document.
-			for assignee in assignees.copy():
-				if self.sender_mailid == assignee or (not is_email_notifications_enabled_for_type(assignee, "threads_on_assigned_document")):
-					assignees.remove(assignee)
-			cc.update(assignees)
+			# assignees = set(self.get_assignees())
+			# # Check and remove If user disabled notifications for incoming emails on assigned document.
+			# for assignee in assignees.copy():
+			# 	if self.sender_mailid == assignee or (not is_email_notifications_enabled_for_type(assignee, "threads_on_assigned_document")):
+			# 		assignees.remove(assignee)
+			# cc.update(assignees)
 
 		cc = set(cc) - set(self.filter_thread_notification_disbled_users(cc))
 		cc = cc - set(self.mail_recipients(is_inbound_mail_communcation=is_inbound_mail_communcation))
